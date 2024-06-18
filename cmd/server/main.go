@@ -10,8 +10,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 //go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -package oapi -generate gin,types,strict-server -o ../../internal/controllers/oapi/api.gen.go ../../api/openapi.yaml
@@ -21,9 +19,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("can not read configuration: %s", err)
 	}
-	router := gin.Default()
 
-	controllers.CreateHandler(cfg)
+	router := controllers.CreateHandler(cfg)
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
